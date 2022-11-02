@@ -90,7 +90,7 @@ namespace Services.UserService
             {
                 return new UserManagerResponseDto
                 {
-                    Message = "Phone number or email null",
+                    Message = "Phone number and email null",
                     IsSuccess = false,
                 };
             }
