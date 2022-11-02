@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    //[Table("Products")]
     public class Product : BaseEntity
     {
         public string Name { get; set; }

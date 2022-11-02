@@ -1,23 +1,19 @@
 ﻿using Domain.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Repository
 {
-    public class AppDbContext : IdentityDbContext
+    public class AppDbContext : IdentityDbContext<User, IdentityRole<int>, int>
     {
+
         public AppDbContext(DbContextOptions options) : base(options)
         {
 
         }
 
-        public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<CartItem> ShoppingCartItems { get; set; } 
+        public DbSet<CartItem> ShoppingCartItems { get; set; }
     }
 }

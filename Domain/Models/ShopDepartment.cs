@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Models
 {
-    public class ShopDepartament : BaseEntity
+    public class ShopDepartment : BaseEntity
     {
         
     }

@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.ProdutService;
@@ -15,16 +16,11 @@ namespace FlowerShopAPI.Controllers
             _userService = userService;
         }
 
-        [HttpGet]
+        [HttpGet("GetUsers")]
+        [Authorize]
         public async Task<IEnumerable<User>> Get()
         {
             return await _userService.GetUsers();
-        }
-
-        [HttpPost]
-        public async Task Create([FromBody]User user)
-        {
-            await _userService.Register(user);
         }
     }
 }
