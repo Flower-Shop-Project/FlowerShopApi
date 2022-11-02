@@ -1,17 +1,15 @@
 ﻿using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Dtos;
+using Shared.Dtos;
+
 
 namespace Services.ProdutService
 {
     public interface IUserService
     {
+        Task<UserManagerResponseDto> Register(RegisterUserDto model);
+        Task<UserManagerResponseDto> Login(LoginUserDto model);
         Task<IEnumerable<User>> GetUsers();
-    //    Task<User> GetUser(int id);
-        Task Register(User user);
-    //    Task DeleteUser(int id);
+        Task<User> GetUser(int id);
     }
 }
