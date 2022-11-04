@@ -8,10 +8,10 @@ using Repository;
 using Repository.Repositories;
 using Repository.Repository;
 using Services.ProdutService;
+using Services.UploadImageService;
 using Services.UserService;
 using System.Text;
-
-
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,11 +26,15 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUploadImagesService, UploadImagesService>();
 
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 
 builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
@@ -75,6 +79,7 @@ builder.Services.AddSwaggerGen(c =>
         Description = "JWT Authorization\n Input: Bearer Token",
     });
 
+
     c.AddSecurityRequirement(new OpenApiSecurityRequirement {
         {
             new OpenApiSecurityScheme {
@@ -96,9 +101,13 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "FlowerShopAPI v1");
+    });
 }
 
+app.UseStaticFiles();
 
 app.UseAuthentication();
 app.UseAuthorization();
