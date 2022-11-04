@@ -40,7 +40,7 @@ namespace FlowerShopAPI.Controllers
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> Create([FromBody]CreateProductDto newProduct)
+        public async Task<IActionResult> Create([FromForm]CreateProductDto newProduct)
         {
             
             if (!ModelState.IsValid)
