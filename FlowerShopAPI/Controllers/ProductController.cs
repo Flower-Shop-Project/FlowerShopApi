@@ -39,7 +39,7 @@ namespace FlowerShopAPI.Controllers
             return Ok(prodcut);
         }
 
-        [HttpPost]
+        [HttpPost("Create")]
         public async Task<IActionResult> Create([FromBody]CreateProductDto newProduct)
         {
             
