@@ -1,8 +1,6 @@
 ﻿using Dtos;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.ProdutService;
-using Services.UserService;
 using Shared.Dtos;
 
 namespace FlowerShopAPI.Controllers

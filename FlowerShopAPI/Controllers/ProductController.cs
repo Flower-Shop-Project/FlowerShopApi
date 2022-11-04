@@ -1,7 +1,9 @@
-﻿using Domain.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 using Services.ProdutService;
+using Services.UploadImageService;
+using Shared.Dtos;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,25 +14,68 @@ namespace FlowerShopAPI.Controllers
     public class ProductController : ControllerBase
     {
         private IProductService _productService;
-        public ProductController(IProductService productService)
+        private IMapper _mapper;
+        private IUploadImagesService _uploadImagesService;
+        public ProductController(IProductService productService, IMapper mapper,
+            IUploadImagesService uploadImagesService)
         {
             _productService = productService;
+            _mapper = mapper;
+            _uploadImagesService = uploadImagesService;
         }
-        [HttpGet]
-        public async Task<IEnumerable<Product>> Get()
+        [HttpGet("GetAll")]
+        public async Task<ActionResult<IEnumerable<CatalogProductsDto>>> Get()
         {
-            return await _productService.GetProducts();
+            var prod = _productService.GetProducts().Result;
+            return Ok(_productService.GetProducts().Result.Select(product => _mapper.Map<CatalogProductsDto>(product)));
         }
         [HttpGet("{id}")]
-        public async Task<Product> Get(int id)
+        public async Task<ActionResult<Product>> Get(int id)
         {
-            return await _productService.GetProduct(id);
+            var prodcut = await _productService.GetProduct(id);
+            if (prodcut == null)
+                return BadRequest("No product with that id");
+
+            return Ok(prodcut);
         }
 
         [HttpPost]
-        public async Task Create([FromBody]Product product)
+        public async Task<IActionResult> Create([FromBody]CreateProductDto newProduct)
         {
+            
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid properties");
+
+            ICollection<string> paths = _uploadImagesService.UploadImages(newProduct.Files);
+            var product = _mapper.Map<Product>(newProduct);
+
+            product.ImagePaths = new List<Image>(); 
+            foreach (var path in paths)
+            {
+                product.ImagePaths.Add(_mapper.Map<Image>(path));
+            }
+
             await _productService.CreateProduct(product);
+            return Ok();
+            
         }
+        [HttpDelete]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var product = _productService.GetProduct(id).Result;
+            if (product == null)
+                return BadRequest("No product with that id");
+
+            _productService.DeleteProduct(id);
+            return Ok();
+        }
+
+        /*
+        [HttpGet("GetByCategories")]
+        public async Task<IActionResult> GetProductsByCategories()
+        {
+            
+        }
+        */
     }
 }

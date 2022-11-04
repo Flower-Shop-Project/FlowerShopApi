@@ -1,12 +1,12 @@
 ﻿using Domain.Models;
-using Repository.Repository;
+using Repository.Repositories;
 
 namespace Services.ProdutService
 {
     public class ProductService : IProductService
     {
-        private IRepository<Product> _repository;
-        public ProductService(IRepository<Product> repository)
+        private IProductRepository _repository;
+        public ProductService(IProductRepository repository)
         {
             _repository = repository;
         }
@@ -16,17 +16,18 @@ namespace Services.ProdutService
         }
         public async Task<Product> GetProduct(int id)
         {
-            return await _repository.Get(id);
+            var product = await _repository.Get(id);
+            
+            return product;
         }
         public async Task CreateProduct(Product product)
         {
             await _repository.Add(product);
         }
+
         public async Task DeleteProduct(int id)
         {
-            var product = await _repository.Get(id);
-            _repository.Delete(product);
-            await _repository.SaveChanges();
+            _repository.Delete(id);
         }
     }
 }

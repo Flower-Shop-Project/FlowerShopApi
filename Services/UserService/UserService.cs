@@ -2,10 +2,8 @@
 using Dtos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Npgsql.Replication.PgOutput.Messages;
 using Repository.Repositories;
 using Services.ProdutService;
 using Shared.Dtos;
@@ -90,7 +88,7 @@ namespace Services.UserService
             {
                 return new UserManagerResponseDto
                 {
-                    Message = "Phone number and email null",
+                    Message = "Phone number or email null",
                     IsSuccess = false,
                 };
             }

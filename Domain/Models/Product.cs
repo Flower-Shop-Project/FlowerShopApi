@@ -1,10 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace Domain.Models
 {
@@ -13,7 +7,10 @@ namespace Domain.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public int Price { get; set; }
-        
-        
+        public ICollection<Image> ImagePaths { get; set; }
+        public ProductType Type { get; set; }
+        public ICollection<ProductFlowerType> FlowerTypes { get; set; }
+        public ICollection<ProductAppointment> Appointments { get; set; }
+
     }
 }
