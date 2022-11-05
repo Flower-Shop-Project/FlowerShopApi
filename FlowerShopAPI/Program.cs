@@ -53,7 +53,7 @@ builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequiredLength = 5;
-}).AddEntityFrameworkStores<AppDbContext>().AddRoles<IdentityRole<int>>().AddEntityFrameworkStores<AppDbContext>()
+}).AddEntityFrameworkStores<AppDbContext>().AddRoles<IdentityRole<int>>()
 .AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(auth =>
