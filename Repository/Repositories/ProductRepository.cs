@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repository.Repositories
@@ -19,6 +20,13 @@ namespace Repository.Repositories
 
         public async Task<Product> Get(int id)
         {
+            await _context.Roles.AddAsync(new IdentityRole<int>
+            {
+                Name = "admin"
+            });
+
+            _context.SaveChanges();
+
             return await _context.Products.Include(x => x.ImagePaths)
                                     .Include(x => x.Appointments)
                                     .Include(x => x.FlowerTypes)

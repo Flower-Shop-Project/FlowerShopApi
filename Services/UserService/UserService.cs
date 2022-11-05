@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Repository;
 using Repository.Repositories;
 using Services.ProdutService;
 using Shared.Dtos;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 
@@ -18,14 +20,14 @@ namespace Services.UserService
         private IUserRepository _repository;
         private UserManager<User> _userManager;
         private IConfiguration _configuration;
-        public UserService(IUserRepository repository, UserManager<User> userManager,
+        public UserService(IUserRepository repository, 
+            UserManager<User> userManager,
             IConfiguration configuration)
         {
             _repository = repository;
             _userManager = userManager;
             _configuration = configuration;
         }
-        
         public async Task<IEnumerable<User>> GetUsers()
         {
             return await _repository.GetAll();
@@ -64,6 +66,7 @@ namespace Services.UserService
 
 
             var result = await _userManager.CreateAsync(identityUser, model.Password);
+
 
             if (result.Succeeded)
             {
@@ -117,11 +120,20 @@ namespace Services.UserService
                     IsSuccess = false
                 };
 
-            var claims = new[]
+            
+
+            var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             };
+
+            var userRoles = await _userManager.GetRolesAsync(user);
+            foreach (var role in userRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
 
