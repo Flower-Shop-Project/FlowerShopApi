@@ -27,7 +27,7 @@ namespace Services.ProdutService
 
         public async Task DeleteProduct(int id)
         {
-            _repository.Delete(id);
+            await _repository.Delete(id);
         }
     }
 }

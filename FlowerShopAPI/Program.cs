@@ -8,12 +8,16 @@ using Repository;
 using Repository.Repositories;
 using Repository.Repository;
 using Services.ProdutService;
+using Services.RoleService;
 using Services.UploadImageService;
 using Services.UserService;
 using System.Text;
 using System.Text.Json.Serialization;
+using static System.Net.Mime.MediaTypeNames;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 
 // Add services to the container.
@@ -30,11 +34,16 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUploadImagesService, UploadImagesService>();
+builder.Services.AddScoped<IRolesService, RolesService>();
+
+
+//builder.Services.AddScoped<RoleManager<User>>();
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 builder.Services.AddControllers()
     .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
 
 
 builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
@@ -44,7 +53,7 @@ builder.Services.AddIdentity<User, IdentityRole<int>>(options =>
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequiredLength = 5;
-}).AddEntityFrameworkStores<AppDbContext>()
+}).AddEntityFrameworkStores<AppDbContext>().AddRoles<IdentityRole<int>>()
 .AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(auth =>
@@ -64,6 +73,8 @@ builder.Services.AddAuthentication(auth =>
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
     };
 });
+
+
 
 
 builder.Services.AddSwaggerGen(c =>
@@ -93,8 +104,10 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
-
 var app = builder.Build();
+
+var rolesService = app.Services.CreateScope().ServiceProvider.GetRequiredService<IRolesService>();
+await rolesService.CreAteInitialRolesAndAssign();
 
 
 // Configure the HTTP request pipeline.

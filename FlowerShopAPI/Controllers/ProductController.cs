@@ -40,7 +40,7 @@ namespace FlowerShopAPI.Controllers
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> Create([FromForm]CreateProductDto newProduct)
+        public async Task<ActionResult> Create([FromForm]CreateProductDto newProduct)
         {
             
             if (!ModelState.IsValid)
@@ -59,22 +59,23 @@ namespace FlowerShopAPI.Controllers
             return Ok();
             
         }
+
         [HttpDelete]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             var product = _productService.GetProduct(id).Result;
             if (product == null)
-                return BadRequest("No product with that id");
+                return NotFound("No product with that id");
 
-            _productService.DeleteProduct(id);
+            await _productService.DeleteProduct(id);
             return Ok();
         }
 
         /*
         [HttpGet("GetByCategories")]
-        public async Task<IActionResult> GetProductsByCategories()
+        public async Task<ActionResult<ICollection<CatalogProductsDto>>> GetProductsByCategories([FromQuery] QueryProductsDto queryProductsDto)
         {
-            
+
         }
         */
     }

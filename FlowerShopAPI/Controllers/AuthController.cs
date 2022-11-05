@@ -39,7 +39,7 @@ namespace FlowerShopAPI.Controllers
                 var result = await _userService.Login(model);
 
                 if (result.IsSuccess)
-                    return Ok(result);
+                    return Ok(result.Message);
 
                 return BadRequest(result);
             }
