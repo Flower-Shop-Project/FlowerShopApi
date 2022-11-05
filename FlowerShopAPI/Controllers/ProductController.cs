@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Domain.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Services.ProdutService;
 using Services.UploadImageService;
@@ -23,6 +24,7 @@ namespace FlowerShopAPI.Controllers
             _mapper = mapper;
             _uploadImagesService = uploadImagesService;
         }
+        [EnableCors]
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<CatalogProductsDto>>> Get()
         {
