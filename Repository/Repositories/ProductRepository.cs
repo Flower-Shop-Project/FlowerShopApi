@@ -13,7 +13,6 @@ namespace Repository.Repositories
         }
         public async Task Add(Product product)
         {
-            product.Id = default;
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
         }
