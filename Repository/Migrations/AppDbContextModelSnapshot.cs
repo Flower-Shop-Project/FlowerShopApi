@@ -95,7 +95,12 @@ namespace Repository.Migrations
                     b.Property<int>("Price")
                         .HasColumnType("integer");
 
+                    b.Property<int>("ProductTypeId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ProductTypeId");
 
                     b.ToTable("Products");
                 });
@@ -155,13 +160,7 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId")
-                        .IsUnique();
 
                     b.ToTable("ProductTypes");
                 });
@@ -424,15 +423,15 @@ namespace Repository.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("Domain.Models.ProductType", b =>
+            modelBuilder.Entity("Domain.Models.Product", b =>
                 {
-                    b.HasOne("Domain.Models.Product", "Product")
-                        .WithOne("Type")
-                        .HasForeignKey("Domain.Models.ProductType", "ProductId")
+                    b.HasOne("Domain.Models.ProductType", "Type")
+                        .WithMany("Products")
+                        .HasForeignKey("ProductTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Product");
+                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
@@ -519,9 +518,11 @@ namespace Repository.Migrations
             modelBuilder.Entity("Domain.Models.Product", b =>
                 {
                     b.Navigation("ImagePaths");
+                });
 
-                    b.Navigation("Type")
-                        .IsRequired();
+            modelBuilder.Entity("Domain.Models.ProductType", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
