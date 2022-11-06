@@ -10,5 +10,7 @@ namespace Shared.Dtos
         public string Price { get; set; }
         [Required]
         public List<IFormFile> Files { get; set; }
+        [Required]
+        public int ProductTypeId { get; set; }
     }
 }
