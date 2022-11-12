@@ -13,6 +13,9 @@ namespace FlowerShopAPI
             CreateMap<CreateProductDto, Product>().ForMember(opt => opt.ImagePaths, opt => opt.MapFrom(e => e.Files)).PreserveReferences();
             CreateMap<string, Image>().ForMember(opt => opt.Path, opt => opt.MapFrom(e => e));
             CreateMap<FormFile, Image>().ForMember(opt => opt.Path, opt => opt.MapFrom(e => e));
+
+            CreateMap<int, ProductFlowerType>().ForMember(opt => opt.Id, opt => opt.MapFrom(e => e));
+            CreateMap<int, ProductAppointment>().ForMember(opt => opt.Id, opt => opt.MapFrom(e => e));
         }
     }
 }

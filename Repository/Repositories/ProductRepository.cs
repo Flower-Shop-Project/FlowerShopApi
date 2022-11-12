@@ -1,5 +1,4 @@
 ﻿using Domain.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Repository.Repositories
@@ -13,7 +12,7 @@ namespace Repository.Repositories
         }
         public async Task Add(Product product)
         {
-            await _context.Products.AddAsync(product);
+            _context.Products.Attach(product);
             await _context.SaveChangesAsync();
         }
 

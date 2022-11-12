@@ -13,7 +13,6 @@ using Services.UploadImageService;
 using Services.UserService;
 using System.Text;
 using System.Text.Json.Serialization;
-using static System.Net.Mime.MediaTypeNames;
 
 
 var builder = WebApplication.CreateBuilder(args);
