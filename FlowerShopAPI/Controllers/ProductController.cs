@@ -44,22 +44,16 @@ namespace FlowerShopAPI.Controllers
         [HttpPost("Create")]
         public async Task<ActionResult> Create([FromForm]CreateProductDto newProduct)
         {
-            
+
             if (!ModelState.IsValid)
                 return BadRequest("Invalid properties");
 
-            ICollection<string> paths = _uploadImagesService.UploadImages(newProduct.Files);
             var product = _mapper.Map<Product>(newProduct);
-
-            product.ImagePaths = new List<Image>(); 
-            foreach (var path in paths)
-            {
-                product.ImagePaths.Add(_mapper.Map<Image>(path));
-            }
+            ICollection<string> imageNames = _uploadImagesService.UploadImages(newProduct.Files);
+            product.ImagePaths = _mapper.Map<ICollection<Image>>(imageNames);
 
             await _productService.CreateProduct(product);
             return Ok();
-            
         }
 
         [HttpDelete]
