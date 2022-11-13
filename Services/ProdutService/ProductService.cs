@@ -1,5 +1,6 @@
 ﻿using Domain.Models;
 using Repository.Repositories;
+using Shared.Dtos;
 
 namespace Services.ProdutService
 {
@@ -28,6 +29,11 @@ namespace Services.ProdutService
         public async Task DeleteProduct(int id)
         {
             await _repository.Delete(id);
+        }
+
+        public async Task<ICollection<Product>> FindByRequirements(QueryProductsDto queryProductsDto)
+        {
+            return await _repository.QueryByRequierements(queryProductsDto);
         }
     }
 }

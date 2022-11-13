@@ -67,12 +67,18 @@ namespace FlowerShopAPI.Controllers
             return Ok();
         }
 
-        /*
+        
         [HttpGet("GetByCategories")]
-        public async Task<ActionResult<ICollection<CatalogProductsDto>>> GetProductsByCategories([FromQuery] QueryProductsDto queryProductsDto)
+        public async Task<ActionResult<ICollection<Product>>> GetByQuery([FromQuery]QueryProductsDto queryProductsDto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid properties");
 
+            var products = _productService.FindByRequirements(queryProductsDto).Result;
+
+            var catalogProducts = _mapper.Map<ICollection<CatalogProductsDto>>(products);
+            return Ok(catalogProducts);
         }
-        */
+        
     }
 }
