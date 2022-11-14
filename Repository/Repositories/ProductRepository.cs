@@ -22,6 +22,7 @@ namespace Repository.Repositories
             return await _context.Products.Include(x => x.ImagePaths)
                                     .Include(x => x.Appointments)
                                     .Include(x => x.FlowerTypes)
+                                    .Include(x => x.Type)
                                     .SingleOrDefaultAsync(x => x.Id == id);
         }
 

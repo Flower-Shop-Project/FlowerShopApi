@@ -32,13 +32,13 @@ namespace FlowerShopAPI.Controllers
             return Ok(_productService.GetProducts().Result.Select(product => _mapper.Map<CatalogProductsDto>(product)));
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> Get(int id)
+        public async Task<ActionResult<ProductCardDto>> Get(int id)
         {
             var prodcut = await _productService.GetProduct(id);
             if (prodcut == null)
                 return BadRequest("No product with that id");
 
-            return Ok(prodcut);
+            return Ok(_mapper.Map<ProductCardDto>(prodcut));
         }
 
         [HttpPost("Create")]
@@ -69,7 +69,7 @@ namespace FlowerShopAPI.Controllers
 
         
         [HttpGet("GetByQuery")]
-        public async Task<ActionResult<ICollection<Product>>> GetByQuery([FromQuery]QueryProductsDto queryProductsDto)
+        public async Task<ActionResult<ICollection<CatalogProductsDto>>> GetByQuery([FromQuery]QueryProductsDto queryProductsDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest("Invalid properties");
