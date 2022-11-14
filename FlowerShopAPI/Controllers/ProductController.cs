@@ -68,7 +68,7 @@ namespace FlowerShopAPI.Controllers
         }
 
         
-        [HttpGet("GetByCategories")]
+        [HttpGet("GetByQuery")]
         public async Task<ActionResult<ICollection<Product>>> GetByQuery([FromQuery]QueryProductsDto queryProductsDto)
         {
             if (!ModelState.IsValid)
