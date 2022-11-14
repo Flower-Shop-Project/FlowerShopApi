@@ -1,6 +1,7 @@
 ﻿using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using Shared.Dtos;
+using System.Collections.Generic;
 
 namespace Repository.Repositories
 {
@@ -58,31 +59,11 @@ namespace Repository.Repositories
                 products = products.Where(x => x.ProductTypeId == requiredProductType.Id);
             }
             
-
             if (queryStatements.FlowerTypes != null)
-            {
-                foreach (var flowerTypeName in queryStatements.FlowerTypes)
-                {
-                    var flowerType = await _context.ProductFlowerTypes.SingleOrDefaultAsync(x => x.Name == flowerTypeName);
-                    if (flowerType == null)
-                        return new List<Product>();
-
-                    products = products.Where(x => x.FlowerTypes.Any(x => x.Id == flowerType.Id));
-                }
-            }
-
+                products = products.Where(x => x.FlowerTypes.Any(x => queryStatements.FlowerTypes.Any(y => y == x.Name)));
 
             if (queryStatements.Appointments != null)
-            {
-                foreach (var appointmentName in queryStatements.Appointments)
-                {
-                    var appointment = await _context.ProductAppointments.SingleOrDefaultAsync(x => x.Name == appointmentName);
-                    if (appointment == null)
-                        return new List<Product>();
-
-                    products = products.Where(x => x.Appointments.Any(x => x.Id == appointment.Id));
-                }
-            }
+                products = products.Where(x => x.Appointments.Any(x => queryStatements.Appointments.Any(y => y == x.Name)));
 
             if (queryStatements.MaxPrice != null)
                 products = products.Where(x => x.Price <= queryStatements.MaxPrice);
