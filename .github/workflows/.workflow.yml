@@ -29,8 +29,8 @@ jobs:
       run: dotnet build --no-restore
 
     - name: Publish
-      run: dotnet publish -c Release /home/actions-runner/_work/FlowerShopAPI/FlowerShopAPI/
+      run: dotnet publish -c Release /home/actions-runner/_work/FlowerShopApi/FlowerShopApi/
       
     - name: Run
-      working-directory: "/home/actions-runner/_work/FlowerShopAPI/FlowerShopAPI/FlowerShopAPI/bin/Release/net6.0/publish"
+      working-directory: "/home/actions-runner/_work/FlowerShopApi/FlowerShopApi/FlowerShopAPI/bin/Release/net6.0/publish"
       run: sudo dotnet "FlowerShopAPI.dll" &
