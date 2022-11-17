@@ -119,7 +119,8 @@ await rolesService.CreAteInitialRolesAndAssign();
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// IsProduction enable swagger on CI/CD workflow
+if (app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
