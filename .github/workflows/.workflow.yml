@@ -15,7 +15,8 @@ jobs:
     runs-on: self-hosted
 
     steps:
-
+    - name: copy wwwroot's files
+      run: sudo cp -r "/actions-runner/_work/FlowerShopApi/FlowerShopApi/FlowerShopAPI/bin/Release/net6.0/publish/wwwroot/images" /temp-images
     
     - uses: actions/checkout@v3
     - name: Setup .NET
@@ -34,3 +35,6 @@ jobs:
     - name: Run
       working-directory: "/actions-runner/_work/FlowerShopApi/FlowerShopApi/FlowerShopAPI/bin/Release/net6.0/publish"
       run: sudo dotnet "FlowerShopAPI.dll" &
+      
+    - name: return wwwroot's files
+      run: sudo sudo cp -r /temp-images/images "/actions-runner/_work/FlowerShopApi/FlowerShopApi/FlowerShopAPI/bin/Release/net6.0/publish/wwwroot/"
