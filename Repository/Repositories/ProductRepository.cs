@@ -48,7 +48,7 @@ namespace Repository.Repositories
         public async Task<ICollection<Product> > QueryByRequierements(QueryProductsDto queryStatements)
         {
             ProductType requiredProductType = null;
-            IQueryable<Product> products = _context.Products;
+            IQueryable<Product> products = _context.Products.Include(x => x.ImagePaths);
 
             if (queryStatements.Type != null)
             {
