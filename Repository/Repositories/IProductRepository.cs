@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Shared.Dtos;
 
 namespace Repository.Repositories
 {
@@ -9,5 +10,6 @@ namespace Repository.Repositories
         Task<Product> Get(int Id);
         Task Update(Product product);
         Task Delete(int id);
+        Task<ICollection<Product>> QueryByRequierements(QueryProductsDto queryProductsDto);
     }
 }

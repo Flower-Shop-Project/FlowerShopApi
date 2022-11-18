@@ -1,7 +1,5 @@
 ﻿
 
-using System.ComponentModel;
-
 namespace Domain.Models
 {
     public class Product : BaseEntity

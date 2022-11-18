@@ -32,34 +32,28 @@ namespace FlowerShopAPI.Controllers
             return Ok(_productService.GetProducts().Result.Select(product => _mapper.Map<CatalogProductsDto>(product)));
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> Get(int id)
+        public async Task<ActionResult<ProductCardDto>> Get(int id)
         {
             var prodcut = await _productService.GetProduct(id);
             if (prodcut == null)
                 return BadRequest("No product with that id");
 
-            return Ok(prodcut);
+            return Ok(_mapper.Map<ProductCardDto>(prodcut));
         }
 
         [HttpPost("Create")]
         public async Task<ActionResult> Create([FromForm]CreateProductDto newProduct)
         {
-            
+
             if (!ModelState.IsValid)
                 return BadRequest("Invalid properties");
 
-            ICollection<string> paths = _uploadImagesService.UploadImages(newProduct.Files);
             var product = _mapper.Map<Product>(newProduct);
-
-            product.ImagePaths = new List<Image>(); 
-            foreach (var path in paths)
-            {
-                product.ImagePaths.Add(_mapper.Map<Image>(path));
-            }
+            ICollection<string> imageNames = _uploadImagesService.UploadImages(newProduct.Files);
+            product.ImagePaths = _mapper.Map<ICollection<Image>>(imageNames);
 
             await _productService.CreateProduct(product);
             return Ok();
-            
         }
 
         [HttpDelete]
@@ -73,12 +67,18 @@ namespace FlowerShopAPI.Controllers
             return Ok();
         }
 
-        /*
-        [HttpGet("GetByCategories")]
-        public async Task<ActionResult<ICollection<CatalogProductsDto>>> GetProductsByCategories([FromQuery] QueryProductsDto queryProductsDto)
+        
+        [HttpGet("GetByQuery")]
+        public async Task<ActionResult<ICollection<CatalogProductsDto>>> GetByQuery([FromQuery]QueryProductsDto queryProductsDto)
         {
+            if (!ModelState.IsValid)
+                return BadRequest("Invalid properties");
 
+            var products = _productService.FindByRequirements(queryProductsDto).Result;
+
+            var catalogProducts = _mapper.Map<ICollection<CatalogProductsDto>>(products);
+            return Ok(catalogProducts);
         }
-        */
+        
     }
 }

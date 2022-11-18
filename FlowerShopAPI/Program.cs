@@ -2,6 +2,7 @@ using Domain.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Repository;
@@ -13,7 +14,6 @@ using Services.UploadImageService;
 using Services.UserService;
 using System.Text;
 using System.Text.Json.Serialization;
-using static System.Net.Mime.MediaTypeNames;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -119,7 +119,8 @@ await rolesService.CreAteInitialRolesAndAssign();
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// IsProduction enable swagger on CI/CD workflow
+if (app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>

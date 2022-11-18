@@ -1,0 +1,43 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET 
+
+on:
+  push: 
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: self-hosted
+
+    steps:
+    - name: copy wwwroot's files
+      run: sudo cp -r "/actions-runner/_work/FlowerShopApi/FlowerShopApi/FlowerShopAPI/bin/Release/net6.0/publish/wwwroot/images" /temp-images
+      
+    - name: grant permission
+      run: sudo chmod 777 -R "/actions-runner/_work/FlowerShopApi/FlowerShopApi/FlowerShopAPI/bin/Release/net6.0/publish/wwwroot/images"
+    
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+
+    - name: Publish
+      run: dotnet publish -c Release /actions-runner/_work/FlowerShopApi/FlowerShopApi/
+      
+    - name: Run
+      working-directory: "/actions-runner/_work/FlowerShopApi/FlowerShopApi/FlowerShopAPI/bin/Release/net6.0/publish"
+      run: sudo dotnet "FlowerShopAPI.dll" &
+      
+    - name: return wwwroot's files
+      run: sudo sudo cp -r /temp-images/images "/actions-runner/_work/FlowerShopApi/FlowerShopApi/FlowerShopAPI/bin/Release/net6.0/publish/wwwroot/"
